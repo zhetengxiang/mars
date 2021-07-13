@@ -264,10 +264,13 @@ void log_formater(const XLoggerInfo* _info, const char* _logbody, PtrBuffer& _lo
 
         // _log.AllocWrite(30*1024, false);
 #if defined(ANDROID) || _WIN32
-        int len = snprintf((char*)_log.PosPtr(), 1024, "[%s][%s][%" PRIdMAX ", %" PRIdMAX "%s][%s][%s, %s, %d][",  // **CPPLINT SKIP**
-                           _logbody ? levelStrings[_info->level] : levelStrings[kLevelFatal], temp_time,
-                           _info->pid, _info->tid, _info->tid == _info->maintid ? "*" : "", _info->tag ? _info->tag : "",
-                           filename, strFuncName, _info->line);
+        // 精简日志格式
+        int len = snprintf((char*)_log.PosPtr(), 1024, "[%s][%s][%s]",// **CPPLINT SKIP**
+                               temp_time, _logbody ? levelStrings[_info->level] : levelStrings[kLevelFatal],_info->tag ? _info->tag : "");
+        //int len = snprintf((char*)_log.PosPtr(), 1024, "[%s][%s][%" PRIdMAX ", %" PRIdMAX "%s][%s][%s, %s, %d][",  // **CPPLINT SKIP**
+        //                   _logbody ? levelStrings[_info->level] : levelStrings[kLevelFatal], temp_time,
+        //                   _info->pid, _info->tid, _info->tid == _info->maintid ? "*" : "", _info->tag ? _info->tag : "",
+        //                   filename, strFuncName, _info->line);
 #else
         int len = 0;
         int max_len = 1024;
