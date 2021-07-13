@@ -315,7 +315,9 @@ void XloggerAppender::Open(const XLogConfig& _config) {
         __Log2File(buffer.Ptr(), buffer.Length(), false);
         WriteTips2File("~~~~~ end of mmap ~~~~~%s\n", mark_info);
     }
-
+    
+    // 屏蔽日志头文件
+    if(false){
     tickcountdiff_t get_mmap_time = tickcount_t().gettickcount() - tick;
 
     char appender_info[728] = {0};
@@ -344,6 +346,7 @@ void XloggerAppender::Open(const XLogConfig& _config) {
     boost::filesystem::space_info info = boost::filesystem::space(config_.logdir_);
     snprintf(logmsg, sizeof(logmsg), "log dir space info, capacity:%" PRIuMAX" free:%" PRIuMAX" available:%" PRIuMAX, info.capacity, info.free, info.available);
     Write(nullptr, logmsg);
+    }
 }
 
 std::string XloggerAppender::__MakeLogFileNamePrefix(const timeval& _tv, const char* _prefix) {
